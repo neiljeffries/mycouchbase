@@ -2,7 +2,6 @@ package com.neiljeffires.mycouchbase;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Properties;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -27,6 +26,7 @@ public class MycouchbaseApplication {
 	static String connectionString = "localhost";
 	static String username = "travel_sample";
 	static String bucketName = "travel-sample";
+	static String password = System.getenv("travel_sample_password");
 
 	public static void main(String... args) {
 		new SpringApplicationBuilder().sources(MycouchbaseApplication.class).run(args);
@@ -34,14 +34,14 @@ public class MycouchbaseApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void InitCouchbase() throws IOException{
-		System.out.println("-------------------INIT COUCHBASE!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.out.println("-------------------INIT COUCHBASE--------------------");
 
 		// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
-		Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, getCouchBasePassword());
+		Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, password);
 		cluster.disconnect();
 
 		// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
-		cluster = Cluster.connect("couchbase://" + connectionString, ClusterOptions.clusterOptions(username, getCouchBasePassword()).environment(env -> {
+		cluster = Cluster.connect("couchbase://" + connectionString, ClusterOptions.clusterOptions(username, password).environment(env -> {
 			// Customize client settings by calling methods on the "env" variable.
 		}));
 
@@ -65,16 +65,15 @@ public class MycouchbaseApplication {
 		Scope inventoryScope = bucket.scope("inventory");
 		QueryResult result = inventoryScope.query("SELECT * FROM airline WHERE id = 10;");
 
-		// Return the result rows with the rowsAsObject() method and print to the
-		// terminal.
+		// Return the result rows with the rowsAsObject() method and print to the terminal.
 		System.out.println(result.rowsAsObject());
 	}
 
 
-	public String getCouchBasePassword() throws IOException {
-		Properties prop = new Properties();
-		prop.load(this.getClass().getResourceAsStream("/couchbase.properties"));
-		return prop.getProperty("couchbase_password");
-	}
+	// public String getCouchBasePassword() throws IOException {
+	// 	Properties prop = new Properties();
+	// 	prop.load(this.getClass().getResourceAsStream("/couchbase.properties"));
+	// 	return prop.getProperty("couchbase_password");
+	// }
 
 }
