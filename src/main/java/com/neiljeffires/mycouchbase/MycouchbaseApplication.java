@@ -1,10 +1,9 @@
 package com.neiljeffires.mycouchbase;
 
-import java.io.IOException;
 import java.time.Duration;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
@@ -20,20 +19,18 @@ import com.couchbase.client.java.query.QueryResult;
 
 @SpringBootApplication
 public class MycouchbaseApplication {
-
-	// Update these variables to point to your Couchbase Server instance and
-	// credentials.
 	static String connectionString = "localhost";
 	static String username = "travel_sample";
 	static String bucketName = "travel-sample";
 	static String password = System.getenv("travel_sample_password");
 
-	public static void main(String... args) {
-		new SpringApplicationBuilder().sources(MycouchbaseApplication.class).run(args);
-	}
+	public static void main(String[] args) {
+		SpringApplication.run(MycouchbaseApplication.class, args);
+	  }
+
 
 	@EventListener(ApplicationReadyEvent.class)
-	public void InitCouchbase() throws IOException{
+	public void InitCouchbase(){
 		System.out.println("-------------------INIT COUCHBASE--------------------");
 
 		// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.

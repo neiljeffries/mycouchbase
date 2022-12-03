@@ -5,9 +5,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.6</version>
+		<version>3.0.0</version>
 		<relativePath/>
-		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.neiljeffires</groupId>
 	<artifactId>mycouchbase</artifactId>
@@ -16,18 +15,12 @@
 	<description>Project for Spring Boot</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.yaml</groupId>
-					<artifactId>snakeyaml</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -43,12 +36,6 @@
 					<artifactId>logback-classic</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>1.33</version>
 		</dependency>
 
 		<dependency>
