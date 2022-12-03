@@ -1,8 +1,13 @@
 package com.neiljeffires.mycouchbase;
 
+import java.io.IOException;
 import java.time.Duration;
+import java.util.Properties;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
@@ -21,22 +26,24 @@ public class MycouchbaseApplication {
 	// credentials.
 	static String connectionString = "localhost";
 	static String username = "travel_sample";
-	static String password = "xxx";
 	static String bucketName = "travel-sample";
 
 	public static void main(String... args) {
-		// For a secure cluster connection, use `couchbases://<your-cluster-ip>`
-		// instead.
-		Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, password);
+		new SpringApplicationBuilder().sources(MycouchbaseApplication.class).run(args);
+	}
+
+	@EventListener(ApplicationReadyEvent.class)
+	public void InitCouchbase() throws IOException{
+		System.out.println("-------------------INIT COUCHBASE!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+		// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
+		Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, getCouchBasePassword());
 		cluster.disconnect();
 
-		// For a secure cluster connection, use `couchbases://<your-cluster-ip>`
-		// instead.
-		cluster = Cluster.connect(
-				"couchbase://" + connectionString,
-				ClusterOptions.clusterOptions(username, password).environment(env -> {
-					// Customize client settings by calling methods on the "env" variable.
-				}));
+		// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
+		cluster = Cluster.connect("couchbase://" + connectionString, ClusterOptions.clusterOptions(username, getCouchBasePassword()).environment(env -> {
+			// Customize client settings by calling methods on the "env" variable.
+		}));
 
 		// get a bucket reference
 		Bucket bucket = cluster.bucket(bucketName);
@@ -47,9 +54,7 @@ public class MycouchbaseApplication {
 		Collection collection = scope.collection("users");
 
 		// Upsert Document
-		MutationResult upsertResult = collection.upsert(
-				"my-document",
-				JsonObject.create().put("name", "mike"));
+		MutationResult upsertResult = collection.upsert("my-document",JsonObject.create().put("name", "mike"));
 
 		// Get Document
 		GetResult getResult = collection.get("my-document");
@@ -65,8 +70,11 @@ public class MycouchbaseApplication {
 		System.out.println(result.rowsAsObject());
 	}
 
-	// public static void main(String[] args) {
-	// SpringApplication.run(MycouchbaseApplication.class, args);
-	// }
+
+	public String getCouchBasePassword() throws IOException {
+		Properties prop = new Properties();
+		prop.load(this.getClass().getResourceAsStream("/couchbase.properties"));
+		return prop.getProperty("couchbase_password");
+	}
 
 }
