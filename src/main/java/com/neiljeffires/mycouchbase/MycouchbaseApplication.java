@@ -21,7 +21,7 @@ public class MycouchbaseApplication {
 	// credentials.
 	static String connectionString = "localhost";
 	static String username = "travel_sample";
-	static String password = "8675309kyk";
+	static String password = "xxx";
 	static String bucketName = "travel-sample";
 
 	public static void main(String... args) {
