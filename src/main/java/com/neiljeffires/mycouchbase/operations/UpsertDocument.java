@@ -19,7 +19,7 @@ public class UpsertDocument {
     @Autowired
     private YAMLConfig myConfig;
 
-    public MutationResult upsert(String scopeName, String collectionName, String id, String name, String value) {
+    public MutationResult upsertDocument(String scopeName, String collectionName, String id, String name, String value) {
 
         try (Cluster cluster = Cluster.connect(myConfig.getConnectionString(), myConfig.getCouchbaseUserName(), myConfig.getPassword());) {
             // get a bucket reference
