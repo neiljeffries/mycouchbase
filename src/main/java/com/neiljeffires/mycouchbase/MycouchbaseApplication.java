@@ -9,7 +9,6 @@ import org.springframework.context.event.EventListener;
 
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.ClusterOptions;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
 import com.couchbase.client.java.json.JsonObject;
@@ -34,13 +33,12 @@ public class MycouchbaseApplication {
 		System.out.println("-------------------INIT COUCHBASE--------------------");
 
 		// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
-		Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, password);
-		cluster.disconnect();
+		try(Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, password);){
+		// cluster.disconnect();
 
-		// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
-		cluster = Cluster.connect("couchbase://" + connectionString, ClusterOptions.clusterOptions(username, password).environment(env -> {
-			// Customize client settings by calling methods on the "env" variable.
-		}));
+		// cluster = Cluster.connect("couchbase://" + connectionString, ClusterOptions.clusterOptions(username, password).environment(env -> {
+		// 	// Customize client settings by calling methods on the "env" variable.
+		// }));
 
 		// get a bucket reference
 		Bucket bucket = cluster.bucket(bucketName);
@@ -51,7 +49,7 @@ public class MycouchbaseApplication {
 		Collection collection = scope.collection("users");
 
 		// Upsert Document
-		MutationResult upsertResult = collection.upsert("my-document",JsonObject.create().put("name", "mike"));
+		MutationResult upsertResult = collection.upsert("my-document1",JsonObject.create().put("name", "jerry"));
 
 		// Get Document
 		GetResult getResult = collection.get("my-document");
@@ -64,6 +62,10 @@ public class MycouchbaseApplication {
 
 		// Return the result rows with the rowsAsObject() method and print to the terminal.
 		System.out.println(result.rowsAsObject());
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 
 

@@ -1,0 +1,127 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Local - MycouchbaseApplication",
+            "type": "process",
+            "windows": {
+                "command": ".\\scripts\\start_local.bat"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Sonar Scan this project",
+            "type": "process",
+            "windows": {
+                "command": ".\\scripts\\sonar.bat"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Sonar Server",
+            "type": "shell",
+            "windows": {
+                "command": "C:\\DeveloperApps\\sonarqube-9.5.0.56709\\bin\\windows-x86-64\\StartSonar.bat"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start Spring-Boot Only",
+            "type": "shell",
+            "windows": {
+                "command": "mvn clean install spring-boot:run -DskipTests '-Dspring-boot.run.profiles=prod'"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Junit Tests",
+            "type": "shell",
+            "windows": {
+                "command": "mvn clean install test '-Dspring-boot.run.profiles=test'"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Show Running Java Processes",
+            "type": "shell",
+            "windows": {
+                "command": "jps -m"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Use Jfrog settings.xml",
+            "type": "shell",
+            "windows": {
+                "command": "xcopy /s /y C:\\DeveloperApps\\jfrog_settings_xml\\settings.xml C:\\Users\\n_e_i\\.m2"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Use Wild settings.xml",
+            "type": "shell",
+            "windows": {
+                "command": "xcopy /s /y C:\\DeveloperApps\\wild_settings_xml\\settings.xml C:\\Users\\n_e_i\\.m2"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Open Active settings.xml",
+            "type": "shell",
+            "windows": {
+                "command": "notepad C:\\Users\\n_e_i\\.m2\\settings.xml"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        }
+    ]
+  }
