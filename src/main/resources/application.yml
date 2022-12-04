@@ -1,0 +1,4 @@
+couchbaseUserName: travel_sample
+password: your_server_password
+connectionString: couchbase://localhost
+bucketName: travel-sample

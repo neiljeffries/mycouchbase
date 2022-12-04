@@ -2,6 +2,7 @@ package com.neiljeffires.mycouchbase;
 
 import java.time.Duration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -11,37 +12,42 @@ import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.Collection;
 import com.couchbase.client.java.Scope;
-import com.couchbase.client.java.json.JsonObject;
 import com.couchbase.client.java.kv.GetResult;
 import com.couchbase.client.java.kv.MutationResult;
 import com.couchbase.client.java.query.QueryResult;
+import com.neiljeffires.mycouchbase.configs.YAMLConfig;
+import com.neiljeffires.mycouchbase.operations.UpsertDocument;
 
 @SpringBootApplication
 public class MycouchbaseApplication {
-	static String connectionString = "localhost";
-	static String username = "travel_sample";
-	static String bucketName = "travel-sample";
-	static String password = System.getenv("travel_sample_password");
+
+	@Autowired
+    private YAMLConfig myConfig;
+
+	@Autowired
+    private UpsertDocument upsertDocument;
+
+	// static String connectionString = "localhost";
+	// static String username = "travel_sample";
+	// static String bucketName = "travel-sample";
+	// static String password = System.getenv("travel_sample_password");
 
 	public static void main(String[] args) {
 		SpringApplication.run(MycouchbaseApplication.class, args);
-	  }
 
+	  }
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void InitCouchbase(){
-		System.out.println("-------------------INIT COUCHBASE--------------------");
+
+		myConfig.setPassword(System.getenv("travel_sample_password"));
+		System.out.println("CONFIG::::::::::::::::::::::::::::::::::::::::::" + myConfig.toString());
 
 		// For a secure cluster connection, use `couchbases://<your-cluster-ip>` instead.
-		try(Cluster cluster = Cluster.connect("couchbase://" + connectionString, username, password);){
-		// cluster.disconnect();
-
-		// cluster = Cluster.connect("couchbase://" + connectionString, ClusterOptions.clusterOptions(username, password).environment(env -> {
-		// 	// Customize client settings by calling methods on the "env" variable.
-		// }));
+		try(Cluster cluster = Cluster.connect(myConfig.getConnectionString(), myConfig.getCouchbaseUserName(), myConfig.getPassword());){
 
 		// get a bucket reference
-		Bucket bucket = cluster.bucket(bucketName);
+		Bucket bucket = cluster.bucket(myConfig.getBucketName());
 		bucket.waitUntilReady(Duration.ofSeconds(10));
 
 		// get a user defined collection reference
@@ -49,7 +55,8 @@ public class MycouchbaseApplication {
 		Collection collection = scope.collection("users");
 
 		// Upsert Document
-		MutationResult upsertResult = collection.upsert("my-document1",JsonObject.create().put("name", "jerry"));
+		// MutationResult upsertResult = collection.upsert("my-document1",JsonObject.create().put("name", "jerry"));
+		MutationResult upsertResult = upsertDocument.upsert("tenant_agent_00", "users", "my-document", "name", "Donovan");
 
 		// Get Document
 		GetResult getResult = collection.get("my-document");
