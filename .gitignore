@@ -3,7 +3,6 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-#src/main/resources/couchbase.properties
 
 ### STS ###
 .apt_generated
@@ -31,4 +30,4 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-#.vscode/
+.vscode/

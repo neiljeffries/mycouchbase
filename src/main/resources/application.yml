@@ -1,4 +1,4 @@
-couchbaseUserName: travel_sample
-password: your_server_password
-connectionString: couchbase://localhost
+connectionString: couchbase://127.0.0.1
+uname: Administrator
+password: 8675309kyk
 bucketName: travel-sample
