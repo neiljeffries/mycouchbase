@@ -67,7 +67,7 @@ public class UserService implements UserServiceInterface {
 		// Get a reference to the myCollection collection within myScope
 		Collection collection = scope.collection("users");
 
-		// Create a sample document
+		// Create a document
 		JsonObject document = JsonObject.create()
 				.put("name", name)
 				.put("age", age)
