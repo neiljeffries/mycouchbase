@@ -1,8 +1,6 @@
 package com.example.demo.classes;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
-
-@JsonRootName(value = "airline")
+// @JsonRootName(value = "airline")
 public class Airline {
     private String country;
     private String iata;
