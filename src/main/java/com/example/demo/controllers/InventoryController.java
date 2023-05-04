@@ -22,4 +22,10 @@ public class InventoryController {
         return ResponseEntity.ok().body(json);
     }
 
+    @GetMapping("/getAllInventory")
+    public ResponseEntity<String> getAllInventory() {
+        String json = inventoryService.getAllInventory().rowsAsObject().toString();
+        return ResponseEntity.ok().body(json);
+    }
+
 }

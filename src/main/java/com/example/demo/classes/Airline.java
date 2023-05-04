@@ -1,6 +1,6 @@
 package com.example.demo.classes;
 
-// @JsonRootName(value = "airline")
+
 public class Airline {
     private String country;
     private String iata;
@@ -9,16 +9,6 @@ public class Airline {
     private String icao;
     private int id;
     private String type;
-
-    // public Airline(String country, String iata, String name, String callsign, String icao, int id, String type) {
-    //     this.country = country;
-    //     this.iata = iata;
-    //     this.name = name;
-    //     this.callsign = callsign;
-    //     this.icao = icao;
-    //     this.id = id;
-    //     this.type = type;
-    // }
 
     public String getCountry() {
         return country;

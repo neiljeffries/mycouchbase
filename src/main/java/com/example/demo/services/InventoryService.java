@@ -21,24 +21,38 @@ public class InventoryService implements InventoryServiceInterface {
 	private YAMLConfig myConfig;
 
 	@Override
-	public QueryResult getInventoryById(int id) {
+	public QueryResult getAllInventory() {
 
-		try (Cluster cluster = Cluster.connect(myConfig.getConnectionString(), myConfig.getUname(),
-				myConfig.getPassword());) {
+		try (Cluster cluster = Cluster.connect(myConfig.getConnectionString(), myConfig.getUname(),	myConfig.getPassword());) {
 
-			// get a bucket reference
 			Bucket bucket = cluster.bucket(myConfig.getBucketName());
 			bucket.waitUntilReady(Duration.ofSeconds(10));
-
-			// Call the query() method on the scope object and store the result.
 			Scope inventoryScope = bucket.scope("inventory");
-
-			// QueryResult result = inventoryScope.query(String.format("SELECT * FROM airline WHERE id = %d;", id));
 			QueryResult result = inventoryScope.query("SELECT * FROM airline;");
+			List<AirlineObject> airlines =result.rowsAs(AirlineObject.class);
 
-			List<AirlineObject> f =result.rowsAs(AirlineObject.class);
+			for (AirlineObject airline : airlines) {
+				System.out.println("Callsign: " + airline.getAirline().getCallsign() + ", Country: " + airline.getAirline().getCountry());
+			}
 
-			System.out.println(f.get(3).getAirline().getCountry());
+			return result;
+		}
+
+	}
+	@Override
+	public QueryResult getInventoryById(int id) {
+
+		try (Cluster cluster = Cluster.connect(myConfig.getConnectionString(), myConfig.getUname(),	myConfig.getPassword());) {
+
+			Bucket bucket = cluster.bucket(myConfig.getBucketName());
+			bucket.waitUntilReady(Duration.ofSeconds(10));
+			Scope inventoryScope = bucket.scope("inventory");
+			QueryResult result = inventoryScope.query(String.format("SELECT * FROM airline WHERE id = %d;", id));
+			List<AirlineObject> airlines =result.rowsAs(AirlineObject.class);
+
+			for (AirlineObject airline : airlines) {
+				System.out.println("Callsign: " + airline.getAirline().getCallsign() + ", Country: " + airline.getAirline().getCountry());
+			}
 
 			return result;
 		}
