@@ -81,7 +81,7 @@ public class InventoryServiceTests {
 
         when(queryResult.rowsAs(AirlineObject.class)).thenReturn(airlineObjects);
 
-        QueryResult result = inventoryService.getInventoryById(1);
+        QueryResult result = inventoryService.getInventory(1);
         verify(inventoryScope, times(1)).query("SELECT * FROM airline;");
     }
 

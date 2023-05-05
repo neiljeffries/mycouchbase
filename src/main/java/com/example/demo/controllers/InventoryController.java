@@ -16,15 +16,10 @@ public class InventoryController {
     @Autowired
     InventoryService inventoryService;
 
-    @GetMapping("/getInventoryById")
-    public ResponseEntity<String> getInventoryById(@RequestParam(name = "id") int id) {
-        String json = inventoryService.getInventoryById(id).rowsAsObject().toString();
-        return ResponseEntity.ok().body(json);
-    }
-
-    @GetMapping("/getAllInventory")
-    public ResponseEntity<String> getAllInventory() {
-        String json = inventoryService.getAllInventory().rowsAsObject().toString();
+    @GetMapping("/getInventory")
+    public ResponseEntity<String> getInventory(
+            @RequestParam(name = "id", required = false, defaultValue = "-1") int id) {
+        String json = inventoryService.getInventory(id).rowsAsObject().toString();
         return ResponseEntity.ok().body(json);
     }
 
